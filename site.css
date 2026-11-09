@@ -22,7 +22,7 @@ button { font: inherit; }
 
 .site-header { position: sticky; top: 0; z-index: 100; height: var(--header-height); border-bottom: 1px solid #2a2530; background: rgba(23, 19, 26, .985); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; width: min(1050px, calc(100% - 40px)); height: 100%; margin: 0 auto; }
-.brand { display: flex; flex: 0 0 auto; align-items: center; padding: 4px 12px; border-radius: 6px; background: #fff; }
+.brand { display: flex; flex: 0 0 auto; align-items: center; padding: 4px 12px; border-radius: 6px; background: transparent; }
 .brand-logo { width: 164px; height: 78px; object-fit: contain; }
 .brand:focus-visible { outline: 3px solid var(--accent-bright); outline-offset: 3px; }
 .site-nav { display: flex; align-items: center; gap: 27px; }
