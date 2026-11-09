@@ -10,6 +10,7 @@
   --header: #17131a;
   --accent: #a3283c;
   --accent-bright: #d8465d;
+  --header-height: 96px;
 }
 
 * { box-sizing: border-box; }
@@ -19,17 +20,16 @@ a { color: inherit; text-decoration: none; }
 img, iframe, svg { display: block; max-width: 100%; }
 button { font: inherit; }
 
-.site-header { position: sticky; top: 0; z-index: 100; height: 64px; border-bottom: 1px solid #2a2530; background: rgba(23, 19, 26, .985); }
+.site-header { position: sticky; top: 0; z-index: 100; height: var(--header-height); border-bottom: 1px solid #2a2530; background: rgba(23, 19, 26, .985); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; width: min(1050px, calc(100% - 40px)); height: 100%; margin: 0 auto; }
-.brand { display: flex; align-items: center; gap: 9px; color: #fff; }
-.brand-mark { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 8px; background: var(--accent-bright); color: #17131a; font: 700 16px/1 "Chakra Petch", sans-serif; letter-spacing: -2px; }
-.brand-name { font: 700 21px/1 "Chakra Petch", sans-serif; letter-spacing: .2px; }
-.brand-subtitle { color: #817987; font: 600 10px/1 "Chakra Petch", sans-serif; letter-spacing: 1.7px; }
+.brand { display: flex; flex: 0 0 auto; align-items: center; padding: 4px 12px; border-radius: 6px; background: #fff; }
+.brand-logo { width: 164px; height: 78px; object-fit: contain; }
+.brand:focus-visible { outline: 3px solid var(--accent-bright); outline-offset: 3px; }
 .site-nav { display: flex; align-items: center; gap: 27px; }
 .site-nav a { color: #d2ccd5; font: 500 14px/1 "Chakra Petch", sans-serif; transition: color .15s ease; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--accent-bright); }
-.nav-dropdown { position: relative; display: flex; height: 64px; align-items: center; }
-.nav-dropdown-menu { position: absolute; top: 63px; left: -18px; width: 238px; padding: 8px 0; border: 1px solid var(--line); border-radius: 3px; background: #fff; box-shadow: 0 12px 30px rgba(24, 18, 27, .16); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity .14s ease, transform .14s ease, visibility .14s; }
+.nav-dropdown { position: relative; display: flex; height: var(--header-height); align-items: center; }
+.nav-dropdown-menu { position: absolute; top: calc(var(--header-height) - 1px); left: -18px; width: 238px; padding: 8px 0; border: 1px solid var(--line); border-radius: 3px; background: #fff; box-shadow: 0 12px 30px rgba(24, 18, 27, .16); opacity: 0; visibility: hidden; transform: translateY(-5px); transition: opacity .14s ease, transform .14s ease, visibility .14s; }
 .nav-dropdown-menu a { display: block; padding: 11px 15px; color: #c2bbc8; font: 700 12px/1.25 "Noto Sans KR", sans-serif; white-space: nowrap; }
 .nav-dropdown-menu a:hover, .nav-dropdown-menu a:focus-visible, .nav-dropdown-menu a[aria-current="page"] { color: var(--accent-bright); background: #faf7f8; }
 .nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -149,15 +149,16 @@ button { font: inherit; }
 a:focus-visible, button:focus-visible { outline: 3px solid rgba(216,70,93,.45); outline-offset: 3px; }
 
 @media (max-width: 900px) {
+  :root { --header-height: 88px; }
+  .brand-logo { width: 148px; height: 70px; }
   .nav-toggle { display: block; }
-  .site-nav { position: absolute; top: 64px; right: 14px; left: 14px; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px; border: 1px solid #362f3a; border-radius: 7px; background: #1b171f; }
+  .site-nav { position: absolute; top: var(--header-height); right: 14px; left: 14px; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px; border: 1px solid #362f3a; border-radius: 7px; background: #1b171f; }
   .site-nav.is-open { display: flex; }
   .site-nav a { padding: 12px; }
   .nav-dropdown { display: block; height: auto; }
   .nav-dropdown-menu { position: static; width: auto; margin: 0 0 4px 12px; padding: 0; border: 0; background: transparent; box-shadow: none; opacity: 1; visibility: visible; transform: none; }
   .nav-dropdown-menu a { padding: 8px 12px; color: #8e8793; font-size: 11px; }
   .nav-dropdown-menu a:hover, .nav-dropdown-menu a:focus-visible, .nav-dropdown-menu a[aria-current="page"] { background: transparent; }
-  .brand-subtitle { display: none; }
   .area-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-card, .research-card, .course-card { grid-template-columns: 230px 1fr; }
   .people-grid { grid-template-columns: repeat(2, 1fr); }
