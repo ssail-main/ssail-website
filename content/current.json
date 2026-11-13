@@ -8,13 +8,6 @@
       "details": "Ph.D. Civil Engineering, Chungbuk National University (2026)\nResearcher, Korean Institute of Geoscience and Mineral Resources (2021)\nResearch Assistance, SSL (2018 - 2021)\nM.S. Civil Engineering, Chungbuk National University, 2021\nB.S. Civil Engineering, Chungbuk National University, 2020\nEmail: bksro1254@naver.com"
     },
     {
-      "name": "박영서  Yeongseo Park",
-      "photo": "/uploads/people/yeongseo-park.webp",
-      "photo_alt": "Yeongseo Park",
-      "role": "Research Assistance",
-      "details": "M.S. Civil Engineering, Chungbuk National University, 2025\nB.S. Civil Engineering, Chungbuk National University, 2025\nEmail: 1023syp@chungbuk.ac.kr"
-    },
-    {
       "name": "전건열  GeonYeol Jeon",
       "photo": "/uploads/people/geonyeol-jeon.webp",
       "photo_alt": "GeonYeol Jeon",
@@ -43,6 +36,13 @@
       "details": "M.S. Civil Engineering, Chungbuk National University, 2025\nB.S. Computer Science, Ho Chi Minh City University of Education, 2023\nEmail: lamtai2105@gmail.com"
     },
     {
+      "name": "박영서  Yeongseo Park",
+      "photo": "/uploads/people/yeongseo-park.webp",
+      "photo_alt": "Yeongseo Park",
+      "role": "Ph.D Student",
+      "details": "M.S. Civil Engineering, Chungbuk National University, 2025\nB.S. Civil Engineering, Chungbuk National University, 2025\nEmail: 1023syp@chungbuk.ac.kr"
+    },
+    {
       "name": "쏙 쌈밧  Sok Sambath",
       "photo": "/uploads/people/sok-sambath.webp",
       "photo_alt": "Sok Sambath",
@@ -57,6 +57,13 @@
       "details": "B.S. Digital Security, Cheongju University, 2025\nB.A International Studies - English Major, Seowon University, Mar. 2020 – Dec. 2021\nEmail: jamie6380@naver.com"
     },
     {
+      "name": "유정훈  Junghoon Yu",
+      "photo": "/uploads/people/junghoon-yu.webp",
+      "photo_alt": "Junghoon Yu",
+      "role": "Master Student",
+      "details": "B.S. Civil Engineering, Chungbuk National University, 2026\nEmail: civilyu01@chungbuk.ac.kr"
+    },
+    {
       "name": "Minh Anh Dang",
       "photo": "/uploads/people/minh-anh-dang.webp",
       "photo_alt": "Minh Anh Dang",
@@ -69,13 +76,6 @@
       "photo_alt": "Duy Hoang Anh Nguyen",
       "role": "Master Student",
       "details": "B.S. Civil Engineering, University of Transport and Communications, Vietnam, 2021\nEmail: ndhoanganh.research@gmail.com"
-    },
-    {
-      "name": "유정훈  Junghoon Yu",
-      "photo": "/uploads/people/junghoon-yu.webp",
-      "photo_alt": "Junghoon Yu",
-      "role": "Master Student",
-      "details": "B.S. Civil Engineering, Chungbuk National University, 2026\nEmail: civilyu01@chungbuk.ac.kr"
     }
   ]
 }
