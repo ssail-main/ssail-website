@@ -91,10 +91,15 @@ button { font: inherit; }
 .feature-card p, .research-card p, .course-card p, .course-card li { margin: 0; color: var(--text); font-size: 15px; line-height: 1.72; }
 .course-list { display: grid; gap: 18px; }
 .course-card { align-items: start; }
+.course-card--text { display: block; }
 .course-card ul { margin: 18px 0 0; padding: 0; list-style: none; color: var(--text); }
+.course-card ol { margin: 18px 0; padding-left: 1.3em; color: var(--text); }
 .course-card li { margin: 2px 0; }
-.course-card li::before { content: "- "; }
-.course-copy strong { display: block; margin-top: 26px; }
+.course-card ul li::before { content: "- "; }
+.course-copy > strong { display: block; margin-top: 26px; }
+.course-copy .course-body > * + *, .course-copy .course-notes > * + * { margin-top: 18px; }
+.course-notes { margin-top: 20px; }
+.teaching-description { white-space: pre-line; }
 .sensing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: center; margin: 28px 0; }
 .sensing-grid img { width: 100%; max-height: 225px; object-fit: contain; }
 
@@ -130,6 +135,7 @@ button { font: inherit; }
 .publication-section ul { margin: 0; padding-left: 18px; }
 .publication-section li { margin: 3px 0; color: #29252d; font-size: 13px; line-height: 1.42; }
 .publication-section a { color: #1682ae; text-decoration: underline; overflow-wrap: anywhere; }
+.scholar-link { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
 
 /* News */
 .news-list { max-width: 750px; margin: 0 auto; }

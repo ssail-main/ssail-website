@@ -63,7 +63,41 @@ export function createConfig(settings) {
           field('summary', 'Home page introduction', 'text', { required: false, hint: 'Separate from the full article. Leave blank to show the full article on the home page.' }),
           field('link', 'Related link (optional)', 'string', { required: false, pattern: ['^https?://[^\\s<>"\\\\]+$', 'Enter an http:// or https:// URL.'] })
         ]
-      })
+      }),
+      { name: 'teaching', label: 'Teaching', format: 'json', delete: false, editor: { preview: false }, files: [
+        { name: 'courses', label: 'Courses and course groups', file: 'content/teaching.json', fields: [
+          field('eyebrow', 'Section label', 'string', { default: 'TEACHING', required: false }),
+          field('title', 'Page title', 'string', { default: 'Teaching' }),
+          field('description', 'Page introduction (optional)', 'text', { required: false }),
+          field('sections', 'Course groups', 'list', {
+            summary: '{{fields.title}}', collapsed: true, required: false, add_to_top: true, allow_reorder: true,
+            hint: 'Drag group handles to change the order. Open a group to edit or add courses.',
+            fields: [field('title', 'Group heading', 'text', { hint: 'For example: UNDERGRADUATE COURSES. Line breaks are supported.' }),
+              field('courses', 'Courses', 'list', {
+                summary: '{{fields.editor_title}}', collapsed: true, required: false, add_to_top: true, allow_reorder: true,
+                hint: 'New courses appear first in this group. Drag handles to change their order.',
+                fields: [
+                  field('editor_title', 'Editor title', 'string', { hint: 'A short name for finding this card in the editor. It is not displayed on the website.' }),
+                  field('title', 'Visible course heading (optional)', 'string', { required: false }),
+                  field('image', 'Main course image (optional)', 'image', { required: false }),
+                  field('image_alt', 'Main image description', 'string', { required: false }),
+                  field('body', 'Course description and teaching history', 'markdown', {
+                    buttons: ['bold', 'italic', 'link', 'bulleted-list', 'numbered-list'], editor_components: [],
+                    hint: 'Enter the complete description, semesters, prerequisites and links. Use the gallery below for images.'
+                  }),
+                  field('gallery', 'Image gallery (optional)', 'list', {
+                    summary: '{{fields.image_alt}}', collapsed: true, required: false, allow_reorder: true,
+                    fields: [field('image', 'Image', 'image'), field('image_alt', 'Image description', 'string', { required: false })]
+                  }),
+                  field('details', 'Additional information below the gallery (optional)', 'markdown', {
+                    required: false, buttons: ['bold', 'italic', 'link', 'bulleted-list', 'numbered-list'], editor_components: []
+                  })
+                ]
+              })
+            ]
+          })
+        ] }
+      ] }
     ]
   };
 }

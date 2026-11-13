@@ -44,6 +44,40 @@ export function citationHtml(value) {
     transformTags: { a: (tag, attrs) => ({ tagName: tag, attribs: { ...attrs, target: '_blank', rel: 'noopener noreferrer' } }) }
   });
 }
+export function teachingHtml(value) {
+  return sanitize(marked.parse(value || ''), {
+    allowedTags: ['p', 'h3', 'h4', 'strong', 'em', 'b', 'i', 'a', 'ul', 'ol', 'li', 'br', 'blockquote', 'pre', 'code', 'sub', 'sup', 's'],
+    allowedAttributes: { a: ['href', 'target', 'rel'] },
+    allowedSchemes: ['http', 'https', 'mailto'], allowProtocolRelative: false,
+    transformTags: { a: (tag, attrs) => ({ tagName: tag, attribs: { ...attrs, target: '_blank', rel: 'noopener noreferrer' } }) }
+  });
+}
+export function validateTeaching(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid Teaching data');
+  required(value.title, 'Teaching page title');
+  for (const field of ['eyebrow', 'description']) if (value[field] != null && typeof value[field] !== 'string') throw new Error('Invalid Teaching ' + field);
+  if (value.sections == null) value.sections = [];
+  if (!Array.isArray(value.sections)) throw new Error('Invalid Teaching section list');
+  for (const section of value.sections) {
+    required(section.title, 'Teaching section title');
+    if (section.courses == null) section.courses = [];
+    if (!Array.isArray(section.courses)) throw new Error('Invalid course list');
+    for (const course of section.courses) {
+      required(course.body, 'course description / teaching history');
+      for (const field of ['title', 'image_alt', 'details']) if (course[field] != null && typeof course[field] !== 'string') throw new Error('Invalid course ' + field);
+      if (course.image) safeUrl(course.image, true);
+      if (course.gallery == null) course.gallery = [];
+      if (!Array.isArray(course.gallery)) throw new Error('Invalid course gallery');
+      for (const image of course.gallery) safeUrl(required(image.image, 'gallery image'), true);
+    }
+  }
+  return value;
+}
+function teachingSections(teaching) {
+  return teaching.sections.map(section => `<section class="teaching-group"><h2 class="section-heading">${escape(section.title).replace(/\r?\n/g, '<br>')}</h2><div class="course-list">${section.courses.map(course =>
+    `<article class="course-card panel${course.image ? '' : ' course-card--text'}">${course.image ? `<img src="${escape(safeUrl(course.image, true))}" alt="${escape(course.image_alt || course.title || '')}">` : ''}<div class="course-copy">${course.title ? `<h2>${escape(course.title)}</h2>` : ''}<div class="course-body">${teachingHtml(course.body)}</div>${course.gallery.length ? `<div class="sensing-grid">${course.gallery.map(image => `<img src="${escape(safeUrl(image.image, true))}" alt="${escape(image.image_alt || '')}">`).join('')}</div>` : ''}${course.details ? `<div class="course-notes">${teachingHtml(course.details)}</div>` : ''}</div></article>`
+  ).join('\n')}</div></section>`).join('\n') || '<p>Course information will be announced soon.</p>';
+}
 async function json(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
 async function records(source, directory) {
   const files = (await fs.readdir(path.join(source, 'content', directory))).filter(name => name.endsWith('.json')).sort();
@@ -57,6 +91,9 @@ export async function readContent(source = root) {
   let index;
   try { index = validateOrder(await json(path.join(source, 'content/order.json'))); }
   catch (error) { if (error.code !== 'ENOENT') throw error; index = emptyOrder(); }
+  let teaching;
+  try { teaching = validateTeaching(await json(path.join(source, 'content/teaching.json'))); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
   const seen = new Set();
   years.forEach(y => { integer(y.year, 'undergraduate year', 1900, 2200); if (seen.has(y.year)) throw new Error('Duplicate year: ' + y.year); seen.add(y.year); });
   if (!years.length) throw new Error('At least one undergraduate year is required.');
@@ -73,13 +110,18 @@ export async function readContent(source = root) {
   return { years: orderedRecords(years, index.lists.undergraduates, 'undergraduates'), current,
     alumni: orderedRecords(alumni, index.lists.alumni, 'alumni'),
     publications: orderedRecords(publications, index.lists.publications, 'publications'),
-    news: orderedRecords(news, index.lists.news, 'news') };
+    news: orderedRecords(news, index.lists.news, 'news'), teaching };
 }
 export async function renderPage(file, source, data) {
   const original = await fs.readFile(path.join(source, file), 'utf8');
-  if (!['index.html', 'people.html', 'people_undergraduate.html', 'people_alumni.html', 'publications.html', 'news.html'].includes(file)) return original;
+  if (!['index.html', 'people.html', 'people_undergraduate.html', 'people_alumni.html', 'publications.html', 'news.html', 'teaching.html'].includes(file)) return original;
+  if (file === 'teaching.html' && !data.teaching) return original;
   const { document } = parseHTML(original);
   const set = (selector, html) => { const element = document.querySelector(selector); if (!element) throw new Error(`Missing ${selector} in ${file}`); element.innerHTML = html; };
+  if (file === 'teaching.html') {
+    set('.page-intro', `<p class="eyebrow">${escape(data.teaching.eyebrow || 'TEACHING')}</p><h1 class="page-title">${escape(data.teaching.title)}</h1>${data.teaching.description ? `<p class="page-description teaching-description">${escape(data.teaching.description)}</p>` : ''}`);
+    set('.page-content', teachingSections(data.teaching));
+  }
   if (file === 'people.html') set('.people-grid', data.current.members.map(person).join('\n'));
   if (file === 'people_undergraduate.html') {
     set('.page-content', `<div class="year-tabs" role="tablist" aria-label="Undergraduate researcher year" data-year-tabs>${data.years.map((y,i) => `<button id="year-${y.year}" type="button" role="tab" data-year="${y.year}" aria-controls="panel-${y.year}" aria-selected="${i===0}">${y.year}</button>`).join('')}</div>` + data.years.map((y,i) => `<section id="panel-${y.year}" class="people-grid undergrad-grid" data-year-panel="${y.year}" role="tabpanel" aria-labelledby="year-${y.year}"${i ? ' hidden' : ''}>${y.members.length ? y.members.map(person).join('\n') : '<p>Members will be announced soon.</p>'}</section>`).join('\n'));
@@ -114,6 +156,6 @@ export async function build({ source = root, output = path.join(root, '_site') }
     await fs.rm(path.join(output, 'CNAME'), { force: true });
   }
   for (const name of ['uploads', 'admin']) await fs.cp(path.join(source, name), path.join(output, name), { recursive: true });
-  return { years: data.years.map(y => y.year), undergraduates: data.years.reduce((n,y) => n + y.members.length,0), current: data.current.members.length, alumni: data.alumni.reduce((n,g)=>n+g.members.length,0), publications: data.publications.length, news: data.news.length, output };
+  return { years: data.years.map(y => y.year), undergraduates: data.years.reduce((n,y) => n + y.members.length,0), current: data.current.members.length, alumni: data.alumni.reduce((n,g)=>n+g.members.length,0), publications: data.publications.length, news: data.news.length, teachingCourses: data.teaching?.sections.reduce((n,s) => n + s.courses.length, 0) || 0, output };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) console.log(JSON.stringify(await build(), null, 2));

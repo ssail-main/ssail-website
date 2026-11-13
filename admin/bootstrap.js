@@ -1,4 +1,4 @@
-import { createConfig } from './collections.js?v=ordering-1';
+import { createConfig } from './collections.js?v=teaching-1';
 import { clearSavedLogin, registerTokenBackend } from './token-backend.js?v=ordering-1';
 import { installOrderingUI } from './reorder-ui.js';
 
