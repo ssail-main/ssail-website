@@ -1,5 +1,5 @@
-.ssail-pages-sidebar .ssail-people-heading { margin: 12px 18px 3px; }
-.ssail-pages-sidebar .ssail-people-heading h3 { margin: 0; color: #313d3e; font: 600 14px/1.6 system-ui, sans-serif; }
-.ssail-pages-sidebar .ssail-people-child > a { padding-left: 30px; line-height: 1.5; min-height: 40px; white-space: normal; }
-.ssail-pages-sidebar .ssail-people-child > a::before { content: ''; width: 4px; height: 4px; margin-right: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
-@media (pointer: coarse) { .ssail-pages-sidebar a[data-testid] { min-height: 44px; } }
+.ssail-people-type { display: grid; grid-template-columns: auto minmax(180px, 310px); align-items: center; gap: 8px 14px; margin-top: 18px; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+.ssail-people-type label { color: #313d3e; font: 500 14px/1.5 system-ui, sans-serif; }
+.ssail-people-type select { box-sizing: border-box; width: 100%; min-height: 42px; padding: 8px 34px 8px 12px; border: 1px solid #d5d9df; border-radius: 4px; background: #fff; color: #313d3e; font: 400 14px/1.5 system-ui, sans-serif; }
+.ssail-people-type p { grid-column: 1 / -1; margin: 0; color: #66717a; font: 400 13px/1.6 system-ui, sans-serif; white-space: normal; }
+@media (max-width: 500px) { .ssail-people-type { grid-template-columns: minmax(0,1fr); } .ssail-people-type select { font-size: 16px; min-height: 44px; } }

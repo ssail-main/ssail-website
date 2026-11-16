@@ -1,5 +1,5 @@
 import { pageCollections } from './page-collections.js?v=pages-1';
-import { PAGE_ORDER } from './page-navigation.js?v=pages-1';
+import { PAGE_ORDER } from './page-navigation.js?v=people-type-1';
 const field = (name, label, widget = 'string', extra = {}) => ({ name, label, widget, ...extra });
 const year = () => field('year', 'Year', 'number', { value_type: 'int', min: 1900, max: 2200, default: new Date().getFullYear() });
 const order = () => field('order', 'Website order', 'hidden', { default: 0 });
@@ -27,15 +27,17 @@ export function createConfig(settings) {
     media_folder: 'uploads/cms', public_folder: '/uploads/cms',
     slug: { encoding: 'ascii', clean_accents: true, sanitize_replacement: '-' },
     collections: [
-      folder('undergraduates', 'Undergraduate Researchers', {
+      folder('undergraduates', 'People', {
+        hide: true,
         label_singular: 'Year', slug: '{{fields.year}}', identifier_field: 'year', summary: '{{fields.year}} — Undergraduate researchers',
         sortable_fields: websiteOrder(),
         fields: [year(), order(), members('Undergraduate Researcher')]
       }),
-      { name: 'current', label: 'Current Members', format: 'json', delete: false, editor: { preview: false }, files: [
+      { name: 'current', label: 'People', format: 'json', delete: false, editor: { preview: false }, files: [
         { name: 'members', label: 'Current Members', file: 'content/current.json', fields: [members('Graduate Student')] }
       ] },
-      folder('alumni', 'Alumni', {
+      folder('alumni', 'People', {
+        hide: true,
         label_singular: 'School group', slug: '{{slug}}', summary: '{{title}}', sortable_fields: websiteOrder(),
         fields: [field('title', 'School / group name'), order(), members('Alumni')]
       }),

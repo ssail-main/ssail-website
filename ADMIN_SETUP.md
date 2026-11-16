@@ -75,8 +75,8 @@ Actions 탭에서 **Publish SSAIL website**를 실행하거나 새 커밋으로 
 
 ## 평소 사용
 
-- **관리자 메뉴:** Home → Research → Teaching → People → Publications → News → Contact 순서입니다. People 아래에 Current Members, Undergraduate Researchers, Alumni가 모여 있습니다.
-- **2027년 학부 연구생:** People → Undergraduate Researchers → New Year → 2027 → Members 추가 → 이름/사진/직위/학력 → Publish. 새 연도 탭은 맨 앞에 생성됩니다. 기존 연도의 숫자를 바꾸기보다 새 연도를 생성하세요.
+- **관리자 메뉴:** Home → Research → Teaching → People → Publications → News → Contact 순서입니다. 왼쪽 People은 다른 메뉴와 같은 한 줄 항목입니다. People을 열고 오른쪽 화면의 Type에서 Current Members, Undergraduate Researchers, Alumni 중 하나를 선택합니다.
+- **2027년 학부 연구생:** People → Type: Undergraduate Researchers → New Year → 2027 → Members 추가 → 이름/사진/직위/학력 → Publish. 새 연도 탭은 맨 앞에 생성됩니다. 기존 연도의 숫자를 바꾸기보다 새 연도를 생성하세요.
 - **기존 연도에 학생 추가:** 해당 연도의 Members에 한 명을 더 추가합니다. 새 학생은 맨 앞에 추가되며, 목록 내부에서 드래그하여 조정할 수도 있습니다.
 - **논문/학회 발표:** Publications에서 종류, 연도, 인용문 전체를 입력합니다. 인용문은 기울임꼴과 링크를 지원합니다. 새 항목은 해당 종류의 맨 앞에 표시됩니다.
 - **뉴스:** News에서 본문 전체와 홈 화면용 소개를 따로 입력합니다. 새 글은 맨 앞에 표시되며, 앞의 세 항목이 홈에 표시됩니다.

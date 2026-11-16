@@ -1,5 +1,5 @@
-import { createConfig } from './collections.js?v=pages-1';
-import { installPageNavigation } from './page-navigation.js?v=pages-1';
+import { createConfig } from './collections.js?v=people-type-1';
+import { installPageNavigation } from './page-navigation.js?v=people-type-1';
 import { clearSavedLogin, registerTokenBackend } from './token-backend.js?v=ordering-1';
 import { installOrderingUI } from './reorder-ui.js';
 

@@ -8,7 +8,7 @@ import { root, readContent, renderPage, safeUrl } from './build.mjs';
 import { extractHome, extractResearch, extractContact } from './migrate-pages.mjs';
 import { validatePageContent, youtubeEmbed } from './editable-pages.mjs';
 import { createConfig } from '../admin/collections.js';
-import { installPageNavigation, PAGE_ORDER } from '../admin/page-navigation.js';
+import { installPageNavigation, PAGE_ORDER, PEOPLE_TYPES, peopleKindFromRoute } from '../admin/page-navigation.js';
 
 const data = await readContent();
 const doc = html => parseHTML(html).document;
@@ -102,12 +102,14 @@ test('Missing page data keeps the static fallback; malformed data stops the buil
 test('Admin collections follow website menu order and keep all People editors and years', async () => {
   const config = createConfig({ repo: 'ssail-main/ssail-website', branch: 'main' });
   assert.deepEqual(config.collections.map(c => c.name), PAGE_ORDER);
+  assert.deepEqual(config.collections.filter(c => !c.hide).map(c => c.label), ['Home','Research','Teaching','People','Publications','News','Contact']);
   const byName = Object.fromEntries(config.collections.map(c => [c.name,c]));
   assert.equal(byName.undergraduates.folder, 'content/undergraduates');
-  assert.equal(byName.undergraduates.create, true); assert.equal(byName.undergraduates.hide, undefined);
+  assert.equal(byName.undergraduates.create, true); assert.equal(byName.undergraduates.hide, true);
   assert.ok(data.years.every(year => Number.isInteger(year.year) && Array.isArray(year.members)));
   assert.equal(byName.current.files[0].file, 'content/current.json');
   assert.equal(byName.alumni.folder, 'content/alumni');
+  assert.equal(byName.alumni.hide, true);
   for (const name of ['home','research','contact']) {
     assert.equal(byName[name].files[0].file, `content/${name}.json`);
     await fs.access(path.join(root, byName[name].files[0].file));
@@ -115,29 +117,72 @@ test('Admin collections follow website menu order and keep all People editors an
   assert.equal(config.locale, 'en'); assert.doesNotMatch(JSON.stringify(config.collections), /[가-힣]/);
 });
 
-test('People grouping preserves native links, search, routes and reappears after sidebar rerender', async () => {
-  const { document, window } = parseHTML('<html><body><aside id="cms-sidebar"><h2>Collections</h2><input aria-label="Search all"><ul></ul></aside><aside id="other">Other toolbar</aside></body></html>');
-  window.location = { hash: '#/collections/undergraduates' };
-  const list = document.querySelector('ul');
-  const fixture = () => PAGE_ORDER.map(name => `<li><a href="#/collections/${name}" data-testid="${name}">${name}</a></li>`).join('');
-  list.innerHTML = fixture();
-  const original = document.querySelector('a[data-testid="undergraduates"]');
+function peopleFixture() {
+  const { document, window } = parseHTML('<html><body><div id="collection"><aside><h2>Collections</h2><input aria-label="Search all"><ul></ul></aside><main><div data-top><div><h1>People</h1></div></div><section data-entries>Native entries</section></main></div><aside>Other toolbar</aside></body></html>');
+  // Linkedom omits the browser's HTMLSelectElement.value setter.
+  const selectPrototype = window.HTMLSelectElement.prototype;
+  if (!Object.getOwnPropertyDescriptor(selectPrototype, 'value')?.set) Object.defineProperty(selectPrototype, 'value', {
+    configurable: true,
+    get() { return [...this.options].find(option => option.selected)?.value || this.options[0]?.value || ''; },
+    set(value) { for (const option of this.options) { if (option.value === value) option.setAttribute('selected', ''); else option.removeAttribute('selected'); } }
+  });
+  window.location = new URL('https://example.com/admin/#/collections/current');
+  const config = createConfig({ repo: 'ssail-main/ssail-website', branch: 'main' });
+  document.querySelector('ul').innerHTML = config.collections.filter(c => !c.hide).map(c => `<li><a href="#/collections/${c.name}" data-testid="${c.name}">${c.label}</a></li>`).join('');
+  return { document, window };
+}
+
+test('People is one normal sidebar link with a three-type selector in the content header', async () => {
+  const { document, window } = peopleFixture();
+  const original = document.querySelector('a[data-testid="current"]');
   let nativeClick = false; original.addEventListener('click', () => { nativeClick = true; });
   const ui = installPageNavigation({ document, window });
-  assert.equal(list.querySelectorAll('.ssail-people-heading').length, 1);
-  assert.equal(list.querySelector('.ssail-people-heading h3').textContent, 'People');
-  assert.equal(list.querySelectorAll('.ssail-people-child').length, 3);
-  assert.equal(document.querySelector('a[data-testid="undergraduates"]'), original);
-  assert.equal(original.getAttribute('href'), '#/collections/undergraduates');
-  original.click(); assert.equal(nativeClick, true);
-  assert.ok(original.getAttribute('aria-label').startsWith('People:'));
-  assert.equal(document.querySelector('input').getAttribute('aria-label'), 'Search all');
-  ui.refresh(); assert.equal(list.querySelectorAll('.ssail-people-heading').length, 1);
-  list.innerHTML = fixture();
-  await new Promise(resolve => setTimeout(resolve, 0));
-  assert.equal(list.querySelectorAll('.ssail-people-heading').length, 1);
-  assert.equal(list.querySelectorAll('.ssail-people-child').length, 3);
-  ui.destroy(); assert.equal(document.querySelector('.ssail-people-heading'), null);
-  list.innerHTML = fixture(); await new Promise(resolve => setTimeout(resolve, 0));
+  const labels = [...document.querySelectorAll('aside ul a')].map(a => a.textContent);
+  assert.deepEqual(labels, ['Home','Research','Teaching','People','Publications','News','Contact']);
   assert.equal(document.querySelector('.ssail-people-heading'), null);
+  assert.equal(document.querySelector('aside select'), null);
+  assert.equal(document.querySelector('a[data-testid="current"]'), original);
+  original.click(); assert.equal(nativeClick, true);
+  assert.equal(document.querySelector('input').getAttribute('aria-label'), 'Search all');
+  let select = document.querySelector('main [data-top] select');
+  assert.deepEqual([...select.options].map(o => o.textContent), PEOPLE_TYPES.map(t => t[1]));
+  assert.equal(select.value, 'current');
+  for (const [type] of PEOPLE_TYPES) {
+    select.value = type; select.dispatchEvent(new window.Event('change'));
+    assert.equal(window.location.hash, '#/collections/' + type);
+    assert.equal(original.classList.contains('sidebar-active'), true);
+    assert.equal(original.getAttribute('aria-current'), 'page');
+    assert.equal(document.querySelectorAll('.ssail-people-type').length, 1);
+  }
+  document.querySelector('[data-top]').innerHTML = '<div><h1>People</h1></div>';
+  await new Promise(resolve => setTimeout(resolve, 0));
+  select = document.querySelector('main select');
+  assert.equal(select.value, 'alumni');
+  assert.equal(document.querySelector('[data-entries]').textContent, 'Native entries');
+  window.location.hash = '#/collections/publications'; ui.refresh();
+  assert.equal(document.querySelector('.ssail-people-type'), null);
+  assert.equal(original.classList.contains('sidebar-active'), false);
+  window.location.hash = '#/collections/undergraduates'; ui.refresh();
+  assert.equal(document.querySelector('main select').value, 'undergraduates');
+  ui.destroy(); assert.equal(document.querySelector('.ssail-people-type'), null);
+});
+
+test('People selector cannot navigate from an unsaved editor or alter other collection routes', async () => {
+  const { document, window } = peopleFixture();
+  const ui = installPageNavigation({ document, window });
+  const select = document.querySelector('main select');
+  window.location.hash = '#/collections/undergraduates/new';
+  select.value = 'alumni'; select.dispatchEvent(new window.Event('change'));
+  assert.equal(window.location.hash, '#/collections/undergraduates/new');
+  assert.equal(document.querySelector('.ssail-people-type'), null);
+  for (const route of ['#/collections/news', '#/collections/current/entries/members', '#/collections/alumni/new', '#/search/test']) {
+    assert.equal(peopleKindFromRoute(route), null); window.location.hash = route; ui.refresh();
+    assert.equal(document.querySelector('.ssail-people-type'), null);
+  }
+  window.location.hash = '#/collections/undergraduates?page=2'; ui.refresh();
+  assert.equal(document.querySelector('main select').value, 'undergraduates');
+  document.getElementById('collection').remove();
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(document.querySelector('.ssail-people-type'), null);
+  ui.destroy();
 });
