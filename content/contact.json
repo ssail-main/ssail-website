@@ -1,0 +1,20 @@
+{
+  "eyebrow": "CONTACT",
+  "title": "ADDRESS",
+  "intro": "",
+  "offices": [
+    {
+      "title": "Dr. Yoon's Office:",
+      "english": "810C Innovation Building, Korea University\n145, Anam-ro, Sungbuk-ku, Seoul, Korea",
+      "korean": "서울특별시 성북구 안암로 145\n고려대학교 창의관 810C호"
+    },
+    {
+      "title": "Laboratory & Graduate Student Office:",
+      "english": "604 Innovation Building, Korea University\n145, Anam-ro, Sungbuk-ku, Seoul, Korea",
+      "korean": "서울특별시 성북구 안암로 145\n고려대학교 창의관 604호"
+    }
+  ],
+  "map_query": "고려대학교 창의관",
+  "map_zoom": 16,
+  "map_title": "Korea University Innovation Building map"
+}

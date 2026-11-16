@@ -5,6 +5,7 @@ import { parseHTML } from 'linkedom';
 import { marked } from 'marked';
 import sanitize from 'sanitize-html';
 import { emptyOrder, orderedRecords, validateOrder } from '../admin/order-model.js';
+import { validatePageContent, renderEditablePage } from './editable-pages.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const categories = { journal: 'JOURNAL PUBLICATIONS', conference: 'Conference Publications & Abstracts', poster: 'Posters' };
@@ -94,6 +95,11 @@ export async function readContent(source = root) {
   let teaching;
   try { teaching = validateTeaching(await json(path.join(source, 'content/teaching.json'))); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const pages = {};
+  for (const kind of ['home', 'research', 'contact']) {
+    try { pages[kind] = validatePageContent(kind, await json(path.join(source, `content/${kind}.json`)), safeUrl); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+  }
   const seen = new Set();
   years.forEach(y => { integer(y.year, 'undergraduate year', 1900, 2200); if (seen.has(y.year)) throw new Error('Duplicate year: ' + y.year); seen.add(y.year); });
   if (!years.length) throw new Error('At least one undergraduate year is required.');
@@ -110,13 +116,15 @@ export async function readContent(source = root) {
   return { years: orderedRecords(years, index.lists.undergraduates, 'undergraduates'), current,
     alumni: orderedRecords(alumni, index.lists.alumni, 'alumni'),
     publications: orderedRecords(publications, index.lists.publications, 'publications'),
-    news: orderedRecords(news, index.lists.news, 'news'), teaching };
+    news: orderedRecords(news, index.lists.news, 'news'), teaching, ...pages };
 }
 export async function renderPage(file, source, data) {
   const original = await fs.readFile(path.join(source, file), 'utf8');
-  if (!['index.html', 'people.html', 'people_undergraduate.html', 'people_alumni.html', 'publications.html', 'news.html', 'teaching.html'].includes(file)) return original;
+  if (!['index.html', 'research.html', 'contact.html', 'people.html', 'people_undergraduate.html', 'people_alumni.html', 'publications.html', 'news.html', 'teaching.html'].includes(file)) return original;
   if (file === 'teaching.html' && !data.teaching) return original;
+  if (file === 'research.html' && !data.research || file === 'contact.html' && !data.contact) return original;
   const { document } = parseHTML(original);
+  renderEditablePage(file, document, data, { escape, safeUrl, richHtml: teachingHtml });
   const set = (selector, html) => { const element = document.querySelector(selector); if (!element) throw new Error(`Missing ${selector} in ${file}`); element.innerHTML = html; };
   if (file === 'teaching.html') {
     set('.page-intro', `<p class="eyebrow">${escape(data.teaching.eyebrow || 'TEACHING')}</p><h1 class="page-title">${escape(data.teaching.title)}</h1>${data.teaching.description ? `<p class="page-description teaching-description">${escape(data.teaching.description)}</p>` : ''}`);

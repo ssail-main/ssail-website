@@ -1,0 +1,5 @@
+.ssail-pages-sidebar .ssail-people-heading { margin: 12px 18px 3px; }
+.ssail-pages-sidebar .ssail-people-heading h3 { margin: 0; color: #313d3e; font: 600 14px/1.6 system-ui, sans-serif; }
+.ssail-pages-sidebar .ssail-people-child > a { padding-left: 30px; line-height: 1.5; min-height: 40px; white-space: normal; }
+.ssail-pages-sidebar .ssail-people-child > a::before { content: ''; width: 4px; height: 4px; margin-right: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+@media (pointer: coarse) { .ssail-pages-sidebar a[data-testid] { min-height: 44px; } }

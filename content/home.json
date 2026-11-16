@@ -1,0 +1,31 @@
+{
+  "title": "Smart Structures and AI Lab",
+  "affiliation": "School of Civil, Environmental and Architectural Engineering\nCollege of Engineering, Korea University",
+  "intro": "We develop AI, computer vision, and drone-based technologies for the maintenance and health monitoring of civil infrastructure.",
+  "intro_ko": "AI · 컴퓨터 비전 · 드론 기술을 활용한 토목구조물 유지관리 연구실",
+  "background": "uploads/hero-bridge.webp",
+  "background_alt": "Bridge inspection",
+  "research_label": "RESEARCH AREAS",
+  "areas": [
+    {
+      "title": "Structural Health Monitoring",
+      "body": "Sensing and monitoring of civil structures"
+    },
+    {
+      "title": "Vision-based Damage Detection",
+      "body": "Deep learning for crack and defect detection"
+    },
+    {
+      "title": "AI-driven Maintenance",
+      "body": "Data-driven asset management of infrastructure"
+    },
+    {
+      "title": "Digital Twin",
+      "body": "Virtual replicas of structures for prediction"
+    },
+    {
+      "title": "UAV Inspection",
+      "body": "Drone-based inspection of facilities"
+    }
+  ]
+}

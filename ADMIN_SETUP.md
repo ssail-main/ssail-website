@@ -75,17 +75,22 @@ Actions 탭에서 **Publish SSAIL website**를 실행하거나 새 커밋으로 
 
 ## 평소 사용
 
-- **2027년 학부 연구생:** Undergraduate researchers → New Year → 2027 → Members 추가 → 이름/사진/직위/학력 → Publish. 새 연도 탭은 맨 앞에 생성됩니다. 기존 연도의 숫자를 바꾸기보다 새 연도를 생성하세요.
+- **관리자 메뉴:** Home → Research → Teaching → People → Publications → News → Contact 순서입니다. People 아래에 Current Members, Undergraduate Researchers, Alumni가 모여 있습니다.
+- **2027년 학부 연구생:** People → Undergraduate Researchers → New Year → 2027 → Members 추가 → 이름/사진/직위/학력 → Publish. 새 연도 탭은 맨 앞에 생성됩니다. 기존 연도의 숫자를 바꾸기보다 새 연도를 생성하세요.
 - **기존 연도에 학생 추가:** 해당 연도의 Members에 한 명을 더 추가합니다. 새 학생은 맨 앞에 추가되며, 목록 내부에서 드래그하여 조정할 수도 있습니다.
-- **논문/학회 발표:** Publications & presentations에서 종류, 연도, 인용문 전체를 입력합니다. 인용문은 기울임꼴과 링크를 지원합니다. 새 항목은 해당 종류의 맨 앞에 표시됩니다.
-- **뉴스:** Lab news에서 본문 전체와 홈 화면용 소개를 따로 입력합니다. 새 글은 맨 앞에 표시되며, 앞의 세 항목이 홈에 표시됩니다.
+- **논문/학회 발표:** Publications에서 종류, 연도, 인용문 전체를 입력합니다. 인용문은 기울임꼴과 링크를 지원합니다. 새 항목은 해당 종류의 맨 앞에 표시됩니다.
+- **뉴스:** News에서 본문 전체와 홈 화면용 소개를 따로 입력합니다. 새 글은 맨 앞에 표시되며, 앞의 세 항목이 홈에 표시됩니다.
+- **Research:** Research → Research content에서 소개, 연구 그룹, 카드 제목·전체 설명·이미지·YouTube 영상 주소를 수정합니다. 그룹과 카드의 목록 핸들을 드래그해 순서를 바꾸고 Publish합니다. 카드에는 이미지 또는 영상을 하나 선택합니다. 영상은 YouTube watch/share/embed URL을 지원합니다. Editor title은 관리자에서만 쓰는 이름입니다.
+- **Home / Contact:** Home → Home content에서 메인 제목·소속·소개·배경·연구 분야 카드를, Contact → Contact content에서 각 사무실 주소와 지도 위치를 수정합니다. 새 카드와 사무실 주소는 목록 맨 앞에 추가되며 드래그로 순서를 바꿉니다.
 - **순서 변경:** 컬렉션 목록의 오른쪽 아래 Reorder → 종류/연도/명단 선택 → 드래그 또는 ⇈ ↑ ↓ ⇊ 버튼 → Save order. 숫자 순서 입력란은 없습니다. 논문 종류별, 뉴스 전체, 학부생 연도 탭과 학생, 졸업생 학교 그룹과 학생, 현재 구성원의 순서를 바꿀 수 있습니다. 첫 연도 탭이 기본으로 열립니다(특정 연도 링크로 접속한 경우 제외). 기존 항목의 내용을 수정해도 위치는 유지됩니다.
 - **순서 화면 갱신:** Save order 후 배포를 기다립니다. CMS의 기본 목록은 해당 컬렉션을 다시 열어 갱신합니다. 다른 사람이 저장소를 변경했다는 메시지가 나오면 순서 창을 닫았다가 다시 열어 최신 명단을 읽고 재시도합니다.
 - **Teaching:** Teaching → Courses and course groups → 그룹과 강의 펼치기 → 설명·학기·제목·사진 수정 → Publish. 강의와 그룹을 새로 추가할 수도 있습니다. 새 항목은 해당 목록 맨 앞에 추가되며, 편집 폼에서 목록 핸들을 드래그해 순서를 바꿉니다. Teaching은 오른쪽 아래 Reorder 버튼 대신 이 목록을 사용합니다. Editor title은 관리자에서만 보이는 이름이며, 실제 제목은 Visible course heading에 입력합니다. Main course image는 대표 이미지, Image gallery는 추가 이미지 목록, Additional information below the gallery는 이미지 아래 설명입니다.
 - **사진:** 업로드하면 `uploads/cms/`에 저장됩니다.
 - **저장 후:** GitHub Actions의 배포 성공을 기다린 뒤 홈페이지를 새로고침합니다.
 
-관리 대상은 학부 연구생, 현재 구성원, 졸업생, 논문/발표, 뉴스, Teaching입니다. 교수 소개·Research·Contact는 기존 HTML에서 수정합니다. 연도/논문/뉴스/Teaching 파일 통째 삭제는 실수 방지를 위해 관리 화면에서 꺼 두었습니다. 구성원·강의 목록 내부 항목의 제거는 가능합니다. Teaching 전체는 `content/teaching.json`에 저장되므로 여러 사람이 동시에 편집하기 전에 최신 내용을 확인하세요.
+관리자는 홈페이지의 일곱 메뉴 순서로 표시합니다. Home, Research, Teaching, 구성원 명단, 논문/발표, 뉴스, Contact 내용을 편집할 수 있습니다. People의 교수 소개는 기존 HTML에서 수정합니다. 파일 통째 삭제는 실수 방지를 위해 관리 화면에서 꺼 두었습니다. 구성원·강의·연구·주소 목록 내부 항목의 제거는 가능합니다. Home/Research/Teaching/Contact는 각각 하나의 JSON 파일에 저장되므로 여러 사람이 동시에 편집하기 전에 최신 내용을 확인하세요.
+
+`tools/migrate-pages.mjs`는 기존 HTML에서 Home/Research/Contact 데이터를 처음 옮기는 도구입니다. 이번 변환을 완료했으며, 다시 실행해도 이미 있는 편집 데이터를 덮어쓰지 않습니다. 새 데이터 파일이 없는 이전 소스는 정적 HTML을 사용하고, 잘못된 데이터 파일이 있으면 배포를 중단합니다. 되돌릴 때에는 코드와 해당 페이지의 데이터 변경 이력을 함께 검토하고 최신 콘텐츠를 보존합니다.
 
 순서 정보는 첫 순서 저장 또는 새 항목 게시 시 `content/order.json`에 자동 생성됩니다. 이 파일이 없는 기존 저장소도 기존 순서로 정상 표시됩니다. 멤버 순서는 각 콘텐츠 파일의 `members` 배열에 저장됩니다. 새 콘텐츠·사진·순서 정보는 한 커밋으로 저장하며, 순서 저장은 강제 푸시를 사용하지 않습니다. 업데이트를 올릴 때 기존 콘텐츠 JSON과 사진을 다시 올릴 필요가 없습니다.
 

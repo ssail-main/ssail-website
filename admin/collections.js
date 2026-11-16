@@ -1,3 +1,5 @@
+import { pageCollections } from './page-collections.js?v=pages-1';
+import { PAGE_ORDER } from './page-navigation.js?v=pages-1';
 const field = (name, label, widget = 'string', extra = {}) => ({ name, label, widget, ...extra });
 const year = () => field('year', 'Year', 'number', { value_type: 'int', min: 1900, max: 2200, default: new Date().getFullYear() });
 const order = () => field('order', 'Website order', 'hidden', { default: 0 });
@@ -25,19 +27,19 @@ export function createConfig(settings) {
     media_folder: 'uploads/cms', public_folder: '/uploads/cms',
     slug: { encoding: 'ascii', clean_accents: true, sanitize_replacement: '-' },
     collections: [
-      folder('undergraduates', 'Undergraduate researchers', {
+      folder('undergraduates', 'Undergraduate Researchers', {
         label_singular: 'Year', slug: '{{fields.year}}', identifier_field: 'year', summary: '{{fields.year}} — Undergraduate researchers',
         sortable_fields: websiteOrder(),
         fields: [year(), order(), members('Undergraduate Researcher')]
       }),
-      { name: 'current', label: 'Current members', format: 'json', delete: false, editor: { preview: false }, files: [
-        { name: 'members', label: 'Current members', file: 'content/current.json', fields: [members('Graduate Student')] }
+      { name: 'current', label: 'Current Members', format: 'json', delete: false, editor: { preview: false }, files: [
+        { name: 'members', label: 'Current Members', file: 'content/current.json', fields: [members('Graduate Student')] }
       ] },
       folder('alumni', 'Alumni', {
         label_singular: 'School group', slug: '{{slug}}', summary: '{{title}}', sortable_fields: websiteOrder(),
         fields: [field('title', 'School / group name'), order(), members('Alumni')]
       }),
-      folder('publications', 'Publications & presentations', {
+      folder('publications', 'Publications', {
         label_singular: 'Publication / presentation', slug: '{{fields.year}}-{{slug}}', summary: '{{fields.year}} · {{title}}',
         sortable_fields: websiteOrder(),
         view_groups: [{ label: 'Type', field: 'category' }, { label: 'Year', field: 'year' }],
@@ -54,7 +56,7 @@ export function createConfig(settings) {
           })
         ]
       }),
-      folder('news', 'Lab news', {
+      folder('news', 'News', {
         label_singular: 'News article', slug: '{{slug}}', summary: '{{date_label}} · {{title}}',
         sortable_fields: websiteOrder(),
         fields: [
@@ -97,7 +99,8 @@ export function createConfig(settings) {
             ]
           })
         ] }
-      ] }
-    ]
+      ] },
+      ...pageCollections(field)
+    ].sort((a, b) => PAGE_ORDER.indexOf(a.name) - PAGE_ORDER.indexOf(b.name))
   };
 }

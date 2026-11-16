@@ -1,4 +1,5 @@
-import { createConfig } from './collections.js?v=teaching-1';
+import { createConfig } from './collections.js?v=pages-1';
+import { installPageNavigation } from './page-navigation.js?v=pages-1';
 import { clearSavedLogin, registerTokenBackend } from './token-backend.js?v=ordering-1';
 import { installOrderingUI } from './reorder-ui.js';
 
@@ -32,6 +33,7 @@ async function start() {
     onSessionChanged() { orderingUI?.refresh(); }
   });
   window.CMS.init({ config: createConfig(settings) });
+  installPageNavigation({ window, document });
   document.getElementById('status').hidden = true;
 }
 start().catch(error => status('Could not open the editor', error.message));
